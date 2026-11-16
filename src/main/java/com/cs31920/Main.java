@@ -31,7 +31,9 @@ public class Main {
             int x = Integer.parseInt(line[0]);
             int y = Integer.parseInt(line[1]);
             int demand = Integer.parseInt(line[2]);
-
+            if (demand < 0 || demand > 8) {
+                System.err.println("Unsolvable instance due to invalid demand value: " + demand);
+            }
             // Ensure the coordinates are valid, and withion the bounds
             if (x % 2 == y % 2 &&
                     x < dimensions &&
@@ -40,8 +42,8 @@ public class Main {
                 mapArray[x][y] = demand;
             }
         }
-        Node[] nodes = new Node[dimensions * dimensions];
-        Graph g = new Graph(nodes, dimensions, mapArray);
+
+        Graph g = new Graph(dimensions, mapArray);
     }
 
     public static ArrayList<String> getInput() {

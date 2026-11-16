@@ -10,16 +10,26 @@ public class Node {
     boolean emmitor;
     boolean parasite;
     boolean visited;
+    int[] coordinates = new int[2];
 
-    public Node(boolean parasite, int demand, Path next[]) {
+    public Node(boolean parasite, int demand, Path next[], int[] coordinates) {
         this.parasite = parasite;
         this.demand = demand;
         this.next = next;
+        this.coordinates = coordinates;
     }
 
-    public Node(Path[] next) {
+    public Node(Path[] next, int[] coordinates, boolean emmitor) {
         this.next = next;
+        this.coordinates = coordinates;
+        this.emmitor = emmitor;
         this.visited = true;
+    }
+
+    public Node(Path[] next, int[] coordinates) {
+        this.next = next;
+        this.coordinates = coordinates;
+        this.visited= false;
     }
 
 
