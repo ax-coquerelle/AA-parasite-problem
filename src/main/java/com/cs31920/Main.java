@@ -13,37 +13,11 @@ public class Main {
 
         // Get input from console, store relevant file in map.
         ArrayList<String> map = getInput();
-        // Further processing can be done here before being transofrmed into a graph.
         int dimensions = Integer.parseInt(map.get(0)) * 2 + 1;
-
-        int[][] mapArray = new int[dimensions][dimensions];
-        for (int x = 0; x < dimensions; x++) {
-            if (x % 2 == 1) {
-                for (int y = 0; y < dimensions; y++) {
-                    if (y % 2 == 0) {
-                        mapArray[x][y] = 9;
-                    }
-                }
-            }
-        }
-        for (int i = 1; i < map.size(); i++) {
-            String[] line = map.get(i).split(" ");
-            int x = Integer.parseInt(line[0]);
-            int y = Integer.parseInt(line[1]);
-            int demand = Integer.parseInt(line[2]);
-            if (demand < 0 || demand > 8) {
-                System.err.println("Unsolvable instance due to invalid demand value: " + demand);
-            }
-            // Ensure the coordinates are valid, and withion the bounds
-            if (x % 2 == y % 2 &&
-                    x < dimensions &&
-                    y < dimensions &&
-                    x >= 0 && y >= 0) {
-                mapArray[x][y] = demand;
-            }
-        }
-
-        Graph g = new Graph(dimensions, mapArray);
+        //Make a 2D array of the map, with 9s representing non existing nodes.
+        int[][] mapArray = handleInput(map);
+        
+        Graph mainGraph = new Graph(dimensions, mapArray);
     }
 
     public static ArrayList<String> getInput() {
@@ -83,5 +57,39 @@ public class Main {
             }
             System.out.println();
         }
+    }
+
+    public static int[][] handleInput(ArrayList<String> map) {
+
+        // Further processing can be done here before being transofrmed into a graph.
+        int dimensions = Integer.parseInt(map.get(0)) * 2 + 1;
+
+        int[][] mapArray = new int[dimensions][dimensions];
+        for (int x = 0; x < dimensions; x++) {
+            if (x % 2 == 1) {
+                for (int y = 0; y < dimensions; y++) {
+                    if (y % 2 == 0) {
+                        mapArray[x][y] = 9;
+                    }
+                }
+            }
+        }
+        for (int i = 1; i < map.size(); i++) {
+            String[] line = map.get(i).split(" ");
+            int x = Integer.parseInt(line[0]);
+            int y = Integer.parseInt(line[1]);
+            int demand = Integer.parseInt(line[2]);
+            if (demand < 0 || demand > 8) {
+                System.err.println("Unsolvable instance due to invalid demand value: " + demand);
+            }
+            // Ensure the coordinates are valid, and withion the bounds
+            if (x % 2 == y % 2 &&
+                    x < dimensions &&
+                    y < dimensions &&
+                    x >= 0 && y >= 0) {
+                mapArray[x][y] = demand;
+            }
+        }
+        return mapArray;
     }
 }

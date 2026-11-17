@@ -6,6 +6,9 @@ public class Graph {
     public Graph(int dimensions, int[][] mapArray) {
         this.nodes = new Node[dimensions * dimensions];
         this.dimensions = dimensions;
+
+        //path array creation
+
         int count = 0;
         for( int x = 0; x < dimensions; x++){
             for(int y = 0; y < dimensions; y++){
