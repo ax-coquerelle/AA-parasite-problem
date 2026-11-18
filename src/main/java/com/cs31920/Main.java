@@ -1,5 +1,6 @@
 package com.cs31920;
 
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,14 +11,12 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-
         // Get input from console, store relevant file in map.
         ArrayList<String> map = getInput();
         int dimensions = Integer.parseInt(map.get(0)) * 2 + 1;
         //Make a 2D array of the map, with 9s representing non existing nodes.
         int[][] mapArray = handleInput(map);
-        
-        Graph mainGraph = new Graph(dimensions, mapArray);
+        printGraph(nodeMap(mapArray, dimensions));
     }
 
     public static ArrayList<String> getInput() {
@@ -50,12 +49,11 @@ public class Main {
 
     // Function to print the map in as a grid
     // non existing nodes still exist but are represented as 9s
-    public static void printMap(int[][] map) {
-        for (int[] map1 : map) {
-            for (int j = 0; j < map1.length; j++) {
-                System.out.print(map1[j] + " ");
-            }
-            System.out.println();
+    public static void printGraph(Node[][] nodeMap) {
+        for (int x = nodeMap.length-1; x >= 0; x --) {
+            for (int y = nodeMap[x].length-1; y >= 0; y--) {
+                System.out.print(nodeMap[x][y].demand);
+            }System.out.println();
         }
     }
 
@@ -79,6 +77,7 @@ public class Main {
             int x = Integer.parseInt(line[0]);
             int y = Integer.parseInt(line[1]);
             int demand = Integer.parseInt(line[2]);
+
             if (demand < 0 || demand > 8) {
                 System.err.println("Unsolvable instance due to invalid demand value: " + demand);
             }
@@ -88,8 +87,30 @@ public class Main {
                     y < dimensions &&
                     x >= 0 && y >= 0) {
                 mapArray[x][y] = demand;
+                for(int p = mapArray.length-1; p >= 0; p--){
+                    for(int n = mapArray[p].length-1; n >= 0;n--){
+                    System.out.print(mapArray[p][n]);
+
+                    }System.out.println();
+
+                }System.out.println();
             }
         }
         return mapArray;
+    }
+
+    public static Node[][] nodeMap(int[][] mapArray, int dimensions) {
+        Node[][] Nodes = new Node[mapArray.length][mapArray.length];
+        for (int x = 0; x < mapArray.length; x++) {
+            for (int y = 0; y < mapArray[x].length; y++) {
+              switch(mapArray[x][y]){
+                case 0 -> Nodes[x][y] = new Node(new int[]{x,y}, dimensions, mapArray);
+                case 9 -> Nodes[x][y] = new Node(new int[]{x,y}, dimensions, mapArray,9);
+                default -> Nodes[x][y] = new Node(new int[]{x,y},dimensions, mapArray,true,mapArray[x][y]);
+              }
+
+            }     
+        }       
+        return Nodes;
     }
 }

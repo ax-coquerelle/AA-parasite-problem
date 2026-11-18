@@ -5,34 +5,32 @@ public class Node {
     // parasitic.
     int demand;
     // maximum of 8 nodes connected.
-    Path[] next = new Path[8];
+    NodePath[] next = new NodePath[8];
 
     boolean emmitor;
     boolean parasite;
     boolean visited;
-    int[] coordinates = new int[2];
+    //coordintes are used to find the node when searching via paths.
+    int[] coordinates;
 
-    public Node(boolean parasite, int demand, Path next[], int[] coordinates) {
+    //constructor for parasite nodes
+    public Node(int[] coordinates,int dimensions, int[][] mapArray,boolean parasite, int demand) {
         this.parasite = parasite;
         this.demand = demand;
-        this.next = next;
         this.coordinates = coordinates;
-        createPathArray(coordinates);
+        createPathArray(coordinates, mapArray, dimensions);
     }
-
-    public Node(Path[] next, int[] coordinates, boolean emmitor) {
-        this.next = next;
-        this.coordinates = coordinates;
-        this.emmitor = emmitor;
-        this.visited = true;
-        createPathArray(coordinates);
-    }
-
-    public Node(Path[] next, int[] coordinates) {
-        this.next = next;
+    //constructor for null nodes
+    public Node(int[] coordinates, int dimensions, int[][] mapArray, int demand) {
         this.coordinates = coordinates;
         this.visited = false;
-        createPathArray(coordinates);
+        createPathArray(coordinates, mapArray, dimensions);
+    }
+    //constructor for normal nodes
+    public Node(int[] coordinates, int dimensions, int[][] mapArray) {
+        this.coordinates = coordinates;
+        this.visited = false;
+        createPathArray(coordinates, mapArray, dimensions);
     }
 
     // Getters and setters for the Node class
@@ -44,11 +42,11 @@ public class Node {
         this.demand = demand;
     }
 
-    public Path[] getNext() {
+    public NodePath[] getNext() {
         return next;
     }
 
-    public void setNext(Path[] next) {
+    public void setNext(NodePath[] next) {
         this.next = next;
     }
 
@@ -76,20 +74,16 @@ public class Node {
         this.visited = visited;
     }
 
-    private Path[] createPathArray(int[] coordinates) {
-        Path[] pathArray = new Path[8];
-
-        for (int i = 0; i < 8; i++) {
-            // odd coordinates cannot have more than 4 paths
-            if (coordinates[0] % 2 == 1 && coordinates[1] % 2 == 1 && i > 4) {
-                return pathArray;
-            } else if (coordinates[0] % 2 == 1 && coordinates[1] % 2 == 0) {
-                return pathArray;
-
-                // pathArray[i] = new Path(coordinates, );
-            }
+    private NodePath[] createPathArray(int[] coordinates,int[][] mapArray, int dimensions){ {
+        double[][] offsets = { {+1, +1}, {+1, -1}, {-1, -1}, {-1, +1} };
+        NodePath[] pathArray = new NodePath[8];
+        
+        if(coordinates[0]%2 == 1 && coordinates[1]%2 == 1){
             
+        }else{
+
         }
         return pathArray;
+    }
     }
 }
