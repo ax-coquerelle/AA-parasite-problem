@@ -18,20 +18,42 @@ public class Node {
         this.parasite = parasite;
         this.demand = demand;
         this.coordinates = coordinates;
-        createPathArray(coordinates, mapArray, dimensions);
+        Node current = this;
+        createPathArray(mapArray, dimensions, current);
     }
     //constructor for null nodes
     public Node(int[] coordinates, int dimensions, int[][] mapArray, int demand) {
         this.coordinates = coordinates;
         this.visited = false;
-        createPathArray(coordinates, mapArray, dimensions);
+        Node current = this;
+        createPathArray(mapArray, dimensions, current);
     }
     //constructor for normal nodes
     public Node(int[] coordinates, int dimensions, int[][] mapArray) {
         this.coordinates = coordinates;
         this.visited = false;
-        createPathArray(coordinates, mapArray, dimensions);
+        Node current = this;
+        createPathArray(mapArray, dimensions, current);
     }
+
+        // function to create the paths to each node
+        private NodePath[] createPathArray(int[][] mapArray, int dimensions, Node current){ {
+        int[][] offsets1 = { {+1, +1}, {+1, -1}, {-1, -1}, {-1, +1} };
+        
+        NodePath[] pathArray = new NodePath[8];
+        coordinates = current.coordinates;
+        if(coordinates[0]%2 == 1 && coordinates[1]%2 == 1){
+            for(int i = 0; i < pathArray.length; i++){
+            int[] dest = new int[] {coordinates[0] + offsets1[i][0], coordinates[1] + offsets1[i][1]};
+            NodePath temp = new NodePath(coordinates, dest,1);
+            pathArray[i] = temp;
+            }
+        }else{
+
+        }
+        return pathArray;
+    }
+}
 
     // Getters and setters for the Node class
     public int getDemand() {
@@ -72,18 +94,5 @@ public class Node {
 
     public void setVisited(boolean visited) {
         this.visited = visited;
-    }
-
-    private NodePath[] createPathArray(int[] coordinates,int[][] mapArray, int dimensions){ {
-        double[][] offsets = { {+1, +1}, {+1, -1}, {-1, -1}, {-1, +1} };
-        NodePath[] pathArray = new NodePath[8];
-        
-        if(coordinates[0]%2 == 1 && coordinates[1]%2 == 1){
-            
-        }else{
-
-        }
-        return pathArray;
-    }
     }
 }
