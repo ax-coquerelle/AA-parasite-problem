@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Node {
-    private static final int[][] DIAGONAL = { { 1, 1 }, { 1, -1 }, { -1, -1 }, { -1, 1 } };
-    private static final int[][] AXIS = { { 2, 0 }, { -2, 0 }, { 0, 2 }, { 0, -2 } };
+    private static final int[][] diagonal = { { 1, 1 }, { 1, -1 }, { -1, -1 }, { -1, 1 } };
+    private static final int[][] cardinal = { { 2, 0 }, { -2, 0 }, { 0, 2 }, { 0, -2 } };
     // demand does not need to be instantiated, it is only used when a node is
     // parasitic.
     private int demand;
+    
     // maximum of 8 nodes connected.
     private NodePath[] next = new NodePath[8];
 
@@ -53,6 +54,7 @@ public class Node {
     }
 
     // function to create the paths to each node
+    //debugging help from claude for a rewritten createPathArray.
     private NodePath[] createPathArray(int dimensions) {
 
         ArrayList<NodePath> paths = new ArrayList<>();
@@ -64,9 +66,9 @@ public class Node {
             // if 1 node is even, return empty array so code work without null check
             return new NodePath[0];
 
-        addPaths(paths, DIAGONAL, dimensions); // real nodes have diagonals
+        addPaths(paths, diagonal, dimensions); // real nodes have diagonals
         if (evenX)
-            addPaths(paths, AXIS, dimensions); // even/even nodes link along cardinal directions
+            addPaths(paths, cardinal, dimensions); // even/even nodes link along cardinal directions
         return paths.toArray(new NodePath[0]);
     }
 
