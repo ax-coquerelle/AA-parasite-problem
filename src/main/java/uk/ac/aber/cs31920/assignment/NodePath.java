@@ -1,4 +1,4 @@
-package com.cs31920;
+package uk.ac.aber.cs31920.assignment;
 
 public class NodePath {
     int[] start;
