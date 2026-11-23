@@ -81,6 +81,10 @@ public class Node {
         this.demand = demand;
     }
 
+    public int[] getCoordinates() {
+         return coordinates; 
+    }
+    
     public NodePath[] getNext() {
         return next;
     }
