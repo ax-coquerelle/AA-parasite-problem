@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
-    private static final boolean DEBUG = false;
     public static void main(String[] args){
         // Source - https://stackoverflow.com/q/22150650
         // Posted by k_rollo, modified by community. See post 'Timeline' for change history
@@ -24,19 +24,27 @@ public class Main {
       
         int dimensions = Integer.parseInt(map.get(0)) * 2 + 1;
 
-        //Make a 2D array of the map, with -1s representing non existing nodes.
+        //Make a 2D array of the map with -1s representing non existing nodes.
         int[][] mapArray = handleInput(map);
         if( mapArray== null){
            return "no solution";
         }
-        // debug, delete after
-        if(DEBUG){
-            printGraph(nodeMap(mapArray, dimensions));
-        }
-        
+        Node[][] nodes = nodeMap(mapArray, dimensions);
+        int total = 0;
+        for (Node[] row : nodes)
+            for (Node n : row)
+                if (n.isParasite()) total += n.getDemand();
 
-        String output = "no solution";
-        return output ;
+        List<int[]> result = Search.greedy(nodes, total);
+        if (result == null) return "no solution";
+
+        StringBuilder res = new StringBuilder();
+        for (int[] e : result) {
+            if (res.length() > 0) res.append(' ');
+            res.append(e[0]).append(' ').append(e[1]);
+        }
+        return res.toString();
+    
           }catch (IOException e){
             return "no solution";
         }
@@ -87,8 +95,8 @@ public class Main {
             for (int y = 0; y < mapArray[x].length; y++) {
               switch(mapArray[x][y]){
                 case 0 -> Nodes[x][y] = new Node(new int[]{x,y}, dimensions, mapArray); //normal node
-                case -1 -> Nodes[x][y] = new Node(new int[]{x,y}, dimensions, mapArray,-1); // empty node
-                default -> Nodes[x][y] = new Node(new int[]{x,y},dimensions, mapArray,true,mapArray[x][y]); //parasitic node
+                case -1 -> Nodes[x][y] = new Node(new int[]{x,y}, dimensions, -1); // empty node
+                default -> Nodes[x][y] = new Node(new int[]{x,y},dimensions,true,mapArray[x][y]); //parasitic node
               }
             }     
         }       

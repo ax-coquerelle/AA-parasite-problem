@@ -1,8 +1,7 @@
 package uk.ac.aber.cs31920.assignment;
 
 public class NodePath {
-    int[] start;
-    int[] end;
+    int[] start,end;
     int capacity;
     
     public NodePath(int[] startCoordinates, int[] endCoordinates, int capacity) {

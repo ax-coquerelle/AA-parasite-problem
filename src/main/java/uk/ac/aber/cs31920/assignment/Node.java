@@ -13,14 +13,13 @@ public class Node {
     // maximum of 8 nodes connected.
     private NodePath[] next = new NodePath[8];
 
-    private boolean emmitor;
-    private boolean parasite;
-    private boolean visited;
+    private boolean emmitor,parasite,visited;
+
     // coordintes are used to find the node when searching via paths.
     private int[] coordinates;
 
     // constructor for parasite nodes
-    public Node(int[] coordinates, int dimensions, int[][] mapArray, boolean parasite, int demand) {
+    public Node(int[] coordinates, int dimensions, boolean parasite, int demand) {
         this.parasite = parasite;
         this.demand = demand;
         this.coordinates = coordinates;
@@ -28,10 +27,16 @@ public class Node {
     }
 
     // constructor for null nodes
-    public Node(int[] coordinates, int dimensions, int[][] mapArray, int demand) {
+    public Node(int[] coordinates, int dimensions, int demand) {
         this.coordinates = coordinates;
         this.visited = false;
         this.demand = demand;
+        next = createPathArray(dimensions);
+    }
+
+    public Node(int[] coordinates, int dimensions, boolean emmitor){
+        this.coordinates = coordinates;
+        this.emmitor = emmitor;
         next = createPathArray(dimensions);
     }
 
