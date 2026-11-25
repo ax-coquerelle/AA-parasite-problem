@@ -8,12 +8,12 @@ public class Flow {
     private final int dimension, source, sink, totalDemand;
 
     // edge e and edge e prime are a residual pair.
-    private final int[] head, nextEdge, tail, capacity, baseCap;
+    private final int[] head, nextEdge, tail, capacity, baseCapacity;
     private int edgeCount = 0;
 
-    private final int[] splitEdge; // cell id index of its in->out edge -1 if none
-    private final int[] sourceEdge; // cell id index of its source->out edge -1 if none
-    private final int[] parentEdge, queue; // BFS array allocated once
+    private final int[] splitEdge; // cell id index of its in towards out edge -1 if none
+    private final int[] sourceEdge; // cell id index of its source towards out edge -1 if none
+    private final int[] parentEdge, queue; // BFS array allocated at the start
     private boolean impossible = false;
 
     public Flow(Node[][] nodes, int totalDemand) {
@@ -31,7 +31,7 @@ public class Flow {
         nextEdge = new int[maxEdges];
         tail = new int[maxEdges];
         capacity = new int[maxEdges];
-        baseCap = new int[maxEdges];
+        baseCapacity = new int[maxEdges];
         splitEdge = new int[dimension * dimension];
         sourceEdge = new int[dimension * dimension];
         Arrays.fill(splitEdge, -1); // fill with non existent paths
@@ -39,6 +39,7 @@ public class Flow {
         parentEdge = new int[vertexCount];
         queue = new int[vertexCount];
 
+        //O(n^2)
         for (int x = 0; x < dimension; x++) {
             for (int y = 0; y < dimension; y++) {
                 Node node = nodes[x][y];
@@ -49,13 +50,13 @@ public class Flow {
 
                 if (node.isParasite()) {
                     addEdge(in, sink, node.getDemand()); // drain, capacity = demand
-                    if (node.getDemand() > node.getNext().length)
+                    if (node.getDemand() > node.getNeighbours().length)
                         impossible = true; // set impossible if demand is bigger than edges it has access to
                     continue; // parasites pass nothing onward
                 }
                 splitEdge[id] = addEdge(in, out, 1); // one pulse per node
                 sourceEdge[id] = addEdge(source, out, 0); // opened only for emitters
-                for (NodePath p : node.getNext()) {
+                for (NodePath p : node.getNeighbours()) {
                     int neighbourId = p.end[0] * dimension + p.end[1];
                     addEdge(out, 2 * neighbourId, 1); // out of this cell, into the neighbour
                 }
@@ -65,12 +66,15 @@ public class Flow {
 
  
     private int addEdge(int vStart, int vEnd, int capacity) {
+        //split vertices
         tail[edgeCount] = vEnd;
-        baseCap[edgeCount] = capacity;
+        baseCapacity[edgeCount] = capacity;
         nextEdge[edgeCount] = head[vStart];
         head[vStart] = edgeCount++;
+
+        //add reverse edge
         tail[edgeCount] = vStart;
-        baseCap[edgeCount] = 0;
+        baseCapacity[edgeCount] = 0;
         nextEdge[edgeCount] = head[vEnd];
         head[vEnd] = edgeCount++;
         return edgeCount - 2;
@@ -79,11 +83,11 @@ public class Flow {
     public int maxFlow(List<int[]> emitters) {
         if (impossible)
             return 0;
-        System.arraycopy(baseCap, 0, capacity, 0, edgeCount); // reset tail the starting capacities
+        System.arraycopy(baseCapacity, 0, capacity, 0, edgeCount); // reset to the starting capacities
         for (int[] e : emitters) {
             int id = e[0] * dimension + e[1];
             capacity[splitEdge[id]] = 0; // nothing can pass through an emitter
-            capacity[sourceEdge[id]] = nodes[e[0]][e[1]].getNext().length; // one pulse per incident edge
+            capacity[sourceEdge[id]] = nodes[e[0]][e[1]].getNeighbours().length; // one pulse per incident edge
         }
         return augment();
     }

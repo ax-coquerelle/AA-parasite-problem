@@ -33,6 +33,7 @@ public class Main {
         int total = 0;
         for (Node[] row : nodes)
             for (Node n : row)
+        //O(n^2)
                 if (n.isParasite()) total += n.getDemand();
 
         List<int[]> result = Search.greedy(nodes, total);
@@ -50,16 +51,6 @@ public class Main {
         }
     }
 
-    // Function to print the map in as a grid
-    // non existing nodes still exist but are represented as -1s
-    public static void printGraph(Node[][] nodeMap) {
-        for (int x = nodeMap.length-1; x >= 0; x --) {
-            for (int y = nodeMap[x].length-1; y >= 0; y--) {
-                System.out.print(String.format("%3d",nodeMap[x][y].getDemand()));
-            }System.out.println();
-        }
-    }
-
     public static int[][] handleInput(ArrayList<String> map) {
         int dimensions = Integer.parseInt(map.get(0)) * 2 + 1;
 
@@ -72,6 +63,7 @@ public class Main {
 
         //parse and split all text into individual variables
         for (int i = 1; i < map.size(); i++) {
+        //O(n)
             String[] line = map.get(i).split(" ");
             int x = Integer.parseInt(line[0]);
             int y = Integer.parseInt(line[1]);
@@ -93,6 +85,7 @@ public class Main {
         Node[][] Nodes = new Node[mapArray.length][mapArray.length];
         for (int x = 0; x < mapArray.length; x++) {
             for (int y = 0; y < mapArray[x].length; y++) {
+                //O(n^2)
               switch(mapArray[x][y]){
                 case 0 -> Nodes[x][y] = new Node(new int[]{x,y}, dimensions, mapArray); //normal node
                 case -1 -> Nodes[x][y] = new Node(new int[]{x,y}, dimensions, -1); // empty node

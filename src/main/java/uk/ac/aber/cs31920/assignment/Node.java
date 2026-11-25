@@ -11,40 +11,38 @@ public class Node {
     private int demand;
     
     // maximum of 8 nodes connected.
-    private NodePath[] next = new NodePath[8];
+    private NodePath[] neighbours = new NodePath[8];
 
-    private boolean emmitor,parasite,visited;
+    private boolean emmitor,parasite;
 
     // coordintes are used to find the node when searching via paths.
-    private int[] coordinates;
+    private final int[] coordinates;
 
     // constructor for parasite nodes
     public Node(int[] coordinates, int dimensions, boolean parasite, int demand) {
         this.parasite = parasite;
         this.demand = demand;
         this.coordinates = coordinates;
-        next = createPathArray(dimensions);
+        neighbours = createPathArray(dimensions);
     }
 
     // constructor for null nodes
     public Node(int[] coordinates, int dimensions, int demand) {
         this.coordinates = coordinates;
-        this.visited = false;
         this.demand = demand;
-        next = createPathArray(dimensions);
+        neighbours = createPathArray(dimensions);
     }
 
     public Node(int[] coordinates, int dimensions, boolean emmitor){
         this.coordinates = coordinates;
         this.emmitor = emmitor;
-        next = createPathArray(dimensions);
+        neighbours = createPathArray(dimensions);
     }
 
     // constructor for normal nodes
     public Node(int[] coordinates, int dimensions, int[][] mapArray) {
         this.coordinates = coordinates;
-        this.visited = false;
-        next = createPathArray(dimensions);
+        neighbours = createPathArray(dimensions);
     }
 
     // simple helper function, adds a path with the offset coordinates with capacity
@@ -68,13 +66,13 @@ public class Node {
         boolean evenY = coordinates[1] % 2 == 0;
 
         if (evenX != evenY)
-            // if 1 node is even, return empty array so code work without null check
+            // if only 1 coordinate is even, return empty array so code work without null check
             return new NodePath[0];
 
         addPaths(paths, diagonal, dimensions); // real nodes have diagonals
         if (evenX)
             addPaths(paths, cardinal, dimensions); // even/even nodes link along cardinal directions
-        return paths.toArray(new NodePath[0]);
+        return paths.toArray(NodePath[]::new);
     }
 
     // Getters and setters for the Node class
@@ -90,12 +88,12 @@ public class Node {
          return coordinates; 
     }
     
-    public NodePath[] getNext() {
-        return next;
+    public NodePath[] getNeighbours() {
+        return neighbours;
     }
 
-    public void setNext(NodePath[] next) {
-        this.next = next;
+    public void setNext(NodePath[] neighbours) {
+        this.neighbours = neighbours;
     }
 
     public boolean isEmmitor() {
@@ -112,13 +110,5 @@ public class Node {
 
     public void setParasite(boolean parasite) {
         this.parasite = parasite;
-    }
-
-    public boolean isVisited() {
-        return visited;
-    }
-
-    public void setVisited(boolean visited) {
-        this.visited = visited;
-    }
+    }   
 }
