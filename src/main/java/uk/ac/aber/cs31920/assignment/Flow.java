@@ -50,8 +50,11 @@ public class Flow {
 
                 if (node.isParasite()) {
                     addEdge(in, sink, node.getDemand()); // drain, capacity = demand
-                    if (node.getDemand() > node.getNeighbours().length)
-                        impossible = true; // set impossible if demand is bigger than edges it has access to
+                    int freeNeighbours = 0; // pulses can only arrive from neighbours that are not parasites
+for (NodePath p : node.getNeighbours())
+    if (!nodes[p.end[0]][p.end[1]].isParasite()) freeNeighbours++;
+if (node.getDemand() > freeNeighbours)
+    impossible = true; // demand exceeds the neighbours that could deliver a pulse
                     continue; // parasites pass nothing onward
                 }
                 splitEdge[id] = addEdge(in, out, 1); // one pulse per node
