@@ -104,7 +104,7 @@ public class Flow {
             int qHead = 0, qTail = 0;
             queue[qTail++] = source;
             parentEdge[source] = -2; // marks the source as visited
-            while (qHead < qTail && parentEdge[sink] == -1) {
+            while (qHead < qTail && parentEdge[sink] == -1) { 
                 int u = queue[qHead++];
                 for (int e = head[u]; e != -1; e = nextEdge[e]) {
                     int v = tail[e];

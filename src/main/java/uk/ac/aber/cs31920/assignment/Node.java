@@ -13,7 +13,7 @@ public class Node {
     // maximum of 8 nodes connected.
     private NodePath[] neighbours = new NodePath[8];
 
-    private boolean emmitor,parasite;
+    private boolean emitter,parasite;
 
     // coordintes are used to find the node when searching via paths.
     private final int[] coordinates;
@@ -33,9 +33,9 @@ public class Node {
         neighbours = createPathArray(dimensions);
     }
 
-    public Node(int[] coordinates, int dimensions, boolean emmitor){
+    public Node(int[] coordinates, int dimensions, boolean emitter){
         this.coordinates = coordinates;
-        this.emmitor = emmitor;
+        this.emitter = emitter;
         neighbours = createPathArray(dimensions);
     }
 
@@ -97,11 +97,11 @@ public class Node {
     }
 
     public boolean isEmmitor() {
-        return emmitor;
+        return emitter;
     }
 
-    public void setEmmitor(boolean emmitor) {
-        this.emmitor = emmitor;
+    public void setEmmitor(boolean emitter) {
+        this.emitter = emitter;
     }
 
     public boolean isParasite() {

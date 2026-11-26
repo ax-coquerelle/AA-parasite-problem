@@ -16,7 +16,6 @@ public class Search {
         List<int[]> parasites = new ArrayList<>();
         for (int x = 0; x < nodes.length; x++)
             for (int y = 0; y < nodes.length; y++) {
-        //O(n^2)
                 //adding nodes to either parasite or free
                 if (nodes[x][y].getDemand() == -1) continue;
                 if (nodes[x][y].isParasite()) parasites.add(new int[] {x, y});
